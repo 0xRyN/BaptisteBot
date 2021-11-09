@@ -51,6 +51,19 @@ client.on("messageCreate", (msg) => {
     if (msg.content.toLowerCase().includes("reveille")) {
         msg.reply("Oui chef !");
     }
+    
+    if (msg.content.toLowerCase().includes("di")) {
+		if(msg.content.length > 10){
+			const message = "";
+			const str[] = msg.content.split(" ").includes;
+			for (let i = 0; i < str.length ; i++) {
+				if(str[i].includes("di")){
+					message = str[i].substring(2);
+				}
+			}
+			msg.reply(message);
+		}
+    }    
     react(msg);
     mechant(msg);
     feur(msg);
