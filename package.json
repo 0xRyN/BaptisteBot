@@ -12,5 +12,8 @@
     "start": "node ./app.js"
   },
   "author": "0xRyN",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "^16.8.0"
+}
 }
