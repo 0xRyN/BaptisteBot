@@ -1,3 +1,5 @@
+FULL DISCORD.JS GUIDE : https://discordjs.guide/
+
 # English
 
 ## Dependencies
