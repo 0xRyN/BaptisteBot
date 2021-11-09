@@ -12,12 +12,6 @@ const feur = (msg) => {
     }
 };
 
-const aurelie = (msg) => {
-    if (msg.author.id === "363033061161435136") {
-        //msg.reply("Arrête de geindre !");
-    }
-};
-
 const mechant = (msg) => {
     let rand = Math.random();
     if (rand < 0.05) {
@@ -25,6 +19,13 @@ const mechant = (msg) => {
     }
 };
 
+const react = (msg) => {
+    let s = msg.content;
+    if (s.toLowerCase().includes("haha")) {
+        msg.react("😹");
+    }
+};
+
+exports.react = react;
 exports.mechant = mechant;
 exports.feur = feur;
-exports.aurelie = aurelie;

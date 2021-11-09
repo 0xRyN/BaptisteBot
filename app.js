@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { feur, aurelie, mechant } = require("./functions");
+const { feur, mechant, react } = require("./functions");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
@@ -9,7 +9,7 @@ const client = new Client({
     ],
 });
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.API_KEY; //The API KEY provided in the .env file
 
 client.on("ready", () => {
     console.log("C'est prêt !");
@@ -51,9 +51,8 @@ client.on("messageCreate", (msg) => {
     if (msg.content.toLowerCase().includes("reveille")) {
         msg.reply("Oui chef !");
     }
-
+    react(msg);
     mechant(msg);
-    aurelie(msg);
     feur(msg);
 });
 
