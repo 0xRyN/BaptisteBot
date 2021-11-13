@@ -20,37 +20,10 @@ client.on("messageCreate", (msg) => {
 
     if (msg.author.id === client.application.id) return;
 
-    if (msg.content.toLowerCase().includes("gros")) {
-        msg.reply("Ouais gros ?");
-    }
-
-    if (msg.content.toLowerCase().includes("baptiste")) {
-        msg.reply("T'a pas un 10 balles gros ?");
-    }
-
-    if (msg.content.toLowerCase().includes("olivier")) {
-        msg.reply("Mon anaconda est en train de se révéiller !");
-    }
-
-    if (msg.content.toLowerCase().includes("dany")) {
-        msg.reply("Gros feeling mec !");
-    }
-
-    if (msg.content.toLowerCase().includes("rayan")) {
-        msg.reply("Lequel ?");
-    }
-
-    if (msg.content.toLowerCase().includes("getir")) {
-        msg.reply("Ntm t'auras pas la tech");
-    }
-
     if (msg.content.toLowerCase().includes("ping")) {
         msg.reply("pong !");
     }
 
-    if (msg.content.toLowerCase().includes("reveille")) {
-        msg.reply("Oui chef !");
-    }
     react(msg);
     mechant(msg);
     feur(msg);

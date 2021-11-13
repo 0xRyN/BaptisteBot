@@ -14,7 +14,7 @@ const feur = (msg) => {
 
 const mechant = (msg) => {
     let rand = Math.random();
-    if (rand < 0.05) {
+    if (rand < 0.0005) {
         msg.reply("ouais mais raconte pas ta vie");
     }
 };
