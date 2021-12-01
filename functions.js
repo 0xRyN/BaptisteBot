@@ -57,6 +57,40 @@ const repete = (msg) => {
     }
 };
 
+const pfc = (msg) => {
+    let s = msg.content;
+    msg.reply(jeu_pfc(s));
+};
+
+function jeu_pfc(x) {
+    var random = getRandomInt(3);
+    var choix;
+    var reponse;
+    switch(random){
+        case 0:
+            choix = ("✂️");
+            break;
+        case 1:
+            choix = ("📄");
+            break;
+        default:
+            choix = ("🪨");
+            break;
+    }
+    if((x == "🪨" && choix == "🪨") || (x == "✂️" && choix == "✂️") || (x == "🪨" && choix == "🪨")){
+        reponse = "je choisi : " +  choix + " | Go relancer bg"
+    }else if( (x == "✂️" && choix == "🪨") ||  (x == "📄" && choix == "✂️") ||   (x == "🪨" && choix == "📄")){
+        reponse =  "je choisi : " +  choix + " | Ez ptdrr t'es trop nul, gg "
+    }else {
+        reponse = "je choisi : " +  choix + " | Que de la luck, mais gg"
+    }
+    return reponse;
+}
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+exports.pfc = pfc;
 exports.react = react;
 exports.mechant = mechant;
 exports.feur = feur;

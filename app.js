@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { feur, mechant, react, repete} = require("./functions");
+const { feur, mechant, react, repete, pfc} = require("./functions");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
@@ -9,7 +9,7 @@ const client = new Client({
     ],
 });
 
-const API_KEY = process.env.API_KEY; //The API KEY provided in the .env file
+const API_KEY = "OTEzNTU2MjQzMzM4MTE3MTI0.YaANjQ.rJ-GnqalJG7BFP_OUN85gPeZUc8"; //The API KEY provided in the .env file
 
 client.on("ready", () => {
     console.log("C'est prêt !");
@@ -55,7 +55,7 @@ client.on("messageCreate", (msg) => {
     mechant(msg);
     feur(msg);
     repete(msg);
-
+    pfc(msg);
 });
 
 client.login(API_KEY);
