@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { feur, mechant, react } = require("./functions");
+const { feur, mechant, react, repete} = require("./functions");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
@@ -54,6 +54,8 @@ client.on("messageCreate", (msg) => {
     react(msg);
     mechant(msg);
     feur(msg);
+    repete(msg);
+
 });
 
 client.login(API_KEY);
