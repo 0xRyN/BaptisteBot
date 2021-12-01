@@ -26,6 +26,38 @@ const react = (msg) => {
     }
 };
 
+const repete = (msg) => {
+    let s = msg.content;
+    if (s.toLowerCase().includes("repete")) {
+        const words = s.split(' ');
+        let repete_word = words[0];
+        for(let i = 0; i < words.length; i++){
+            if(words[i] == "repete"){
+                if((i+1) < words.length){
+                    repete_word = words[i+1].toLowerCase();
+                }else{
+                    repete_word = "non";
+                }
+            }
+        }
+        msg.reply(repete_word);
+    
+    /*TODO PLUS TARD faire en emoji;
+        for(let i = 0; i < repete_word.length; i++){
+            console.log("\:regional_indicator_"+ repete_word.charAt(i)+":");
+
+            if(repete_word.charAt(i) >= 97 ||  repete_word.charAt(i) <= 122){
+                msg.react("❔");
+            }else{
+        //        msg.guild.emojis.cache.find(emoji => emoji.name === ("regional_indicator_" + charAt(i))).then((reactionEmoji) => {msg.react(reactionEmoji)});
+            ///    console.log(reactionEmoji);
+               msg.react( msg.guild.emojis.cache.find(emoji => emoji.name === ("regional_indicator_" + charAt(i))).then((reactionEmoji) => {msg.react(reactionEmoji)}));
+            }
+    }*/
+    }
+};
+
 exports.react = react;
 exports.mechant = mechant;
 exports.feur = feur;
+exports.repete = repete;
