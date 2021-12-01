@@ -59,7 +59,9 @@ const repete = (msg) => {
 
 const pfc = (msg) => {
     let s = msg.content;
-    msg.reply(jeu_pfc(s));
+    if (s.toLowerCase().includes("✂️") || s.toLowerCase().includes("📄") || s.toLowerCase().includes("🪨") ) {
+        msg.reply(jeu_pfc(s));
+    }
 };
 
 function jeu_pfc(x) {
