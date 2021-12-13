@@ -7,7 +7,7 @@ const feur = (msg) => {
         s.substring(len - 5, len).toLowerCase() === "quoi?"
     ) {
         msg.reply(
-            "https://cdn.discordapp.com/attachments/730773665066516490/905573160508854303/video0.mov"
+            "https://cdn.discordapp.com/attachments/730773665066516490/919994147241353246/feur.mp4"
         );
     }
 };
@@ -29,20 +29,20 @@ const react = (msg) => {
 const repete = (msg) => {
     let s = msg.content;
     if (s.toLowerCase().includes("repete")) {
-        const words = s.split(' ');
+        const words = s.split(" ");
         let repete_word = words[0];
-        for(let i = 0; i < words.length; i++){
-            if(words[i] == "repete"){
-                if((i+1) < words.length){
-                    repete_word = words[i+1].toLowerCase();
-                }else{
+        for (let i = 0; i < words.length; i++) {
+            if (words[i] == "repete") {
+                if (i + 1 < words.length) {
+                    repete_word = words[i + 1].toLowerCase();
+                } else {
                     repete_word = "non";
                 }
             }
         }
         msg.reply(repete_word);
-    
-    /*TODO PLUS TARD faire en emoji;
+
+        /*TODO PLUS TARD faire en emoji;
         for(let i = 0; i < repete_word.length; i++){
             console.log("\:regional_indicator_"+ repete_word.charAt(i)+":");
 
@@ -59,7 +59,11 @@ const repete = (msg) => {
 
 const pfc = (msg) => {
     let s = msg.content;
-    if (s.toLowerCase().includes("✂️") || s.toLowerCase().includes("📄") || s.toLowerCase().includes("🪨") ) {
+    if (
+        s.toLowerCase().includes("✂️") ||
+        s.toLowerCase().includes("📄") ||
+        s.toLowerCase().includes("🪨")
+    ) {
         msg.reply(jeu_pfc(s));
     }
 };
@@ -68,29 +72,37 @@ function jeu_pfc(x) {
     var random = getRandomInt(3);
     var choix;
     var reponse;
-    switch(random){
+    switch (random) {
         case 0:
-            choix = ("✂️");
+            choix = "✂️";
             break;
         case 1:
-            choix = ("📄");
+            choix = "📄";
             break;
         default:
-            choix = ("🪨");
+            choix = "🪨";
             break;
     }
-    if((x == "🪨" && choix == "🪨") || (x == "✂️" && choix == "✂️") || (x == "🪨" && choix == "🪨")){
-        reponse = "je choisi : " +  choix + " | Go relancer bg"
-    }else if( (x == "✂️" && choix == "🪨") ||  (x == "📄" && choix == "✂️") ||   (x == "🪨" && choix == "📄")){
-        reponse =  "je choisi : " +  choix + " | Ez ptdrr t'es trop nul, gg "
-    }else {
-        reponse = "je choisi : " +  choix + " | Que de la luck, mais gg"
+    if (
+        (x == "🪨" && choix == "🪨") ||
+        (x == "✂️" && choix == "✂️") ||
+        (x == "🪨" && choix == "🪨")
+    ) {
+        reponse = "je choisi : " + choix + " | Go relancer bg";
+    } else if (
+        (x == "✂️" && choix == "🪨") ||
+        (x == "📄" && choix == "✂️") ||
+        (x == "🪨" && choix == "📄")
+    ) {
+        reponse = "je choisi : " + choix + " | Ez ptdrr t'es trop nul, gg ";
+    } else {
+        reponse = "je choisi : " + choix + " | Que de la luck, mais gg";
     }
     return reponse;
 }
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-  }
+}
 
 exports.pfc = pfc;
 exports.react = react;
