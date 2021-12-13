@@ -1,14 +1,20 @@
 const feur = (msg) => {
+    const links = [
+        "https://cdn.discordapp.com/attachments/730773665066516490/919994972470652978/feur.mp4",
+        "https://cdn.discordapp.com/attachments/730773665066516490/919994147241353246/feur.mp4",
+        "https://cdn.discordapp.com/attachments/730773665066516490/919995774014722078/video0.mov",
+        "https://cdn.discordapp.com/attachments/753279793461592174/919996299883970590/yt1s.com_-_FEUR_masterclass_ici_cest_Pessi_.mp4",
+        "https://cdn.discordapp.com/attachments/730773665066516490/919997763524124742/VIDEO_FEUR.mp4",
+    ];
     let s = msg.content;
     let len = s.length;
+    let link = links[Math.floor(Math.random() * items.length)];
     if (
         s.substring(len - 4, len).toLowerCase() === "quoi" ||
         s.substring(len - 6, len).toLowerCase() === "quoi ?" ||
         s.substring(len - 5, len).toLowerCase() === "quoi?"
     ) {
-        msg.reply(
-            "https://cdn.discordapp.com/attachments/730773665066516490/919994147241353246/feur.mp4"
-        );
+        msg.reply(link);
     }
 };
 
