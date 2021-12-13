@@ -8,7 +8,7 @@ const feur = (msg) => {
     ];
     let s = msg.content;
     let len = s.length;
-    let link = links[Math.floor(Math.random() * items.length)];
+    let link = links[Math.floor(Math.random() * links.length)];
     if (
         s.substring(len - 4, len).toLowerCase() === "quoi" ||
         s.substring(len - 6, len).toLowerCase() === "quoi ?" ||
