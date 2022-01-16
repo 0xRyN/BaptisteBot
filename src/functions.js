@@ -7,7 +7,7 @@ const feur = (msg) => {
     let link = links[Math.floor(Math.random() * links.length)];
     let senderID = msg.author.id; // Note : conversion might truncate the ID. Test this.
     if (
-        /\\w*[Qq][Uu][Oo][Ii][^A-Za-z0-9]*/.test(s) // replaced old tests by a regex
+        /\w*[Qq][Uu][Oo][Ii][^A-Za-z0-9]*/.test(s) // replaced old tests by a regex
     ) {
         if (!whitelist.includes(senderID)) {
             msg.reply(link);
