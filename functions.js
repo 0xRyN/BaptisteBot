@@ -113,21 +113,18 @@ const pfc = (msg) => {
 
 const profmail = (msg) => {
     let s = msg.content;
+    let words = s.split(" ");
     let keys = Object.keys(mails);
-    if (s.toLowerCase().includes("!mail")) {
-        const words = s.split(" ");
-        for (let word in words) {
-            for (let key in keys) {
-                if (key.includes(word.toLowerCase())) {
-                    msg.reply(mails.key);
-                    return;
-                }
+    words.forEach((word) => {
+        keys.forEach((key) => {
+            let name = key.split(" ");
+            let lowerWord = word.toLowerCase();
+            if (name.includes(lowerWord)) {
+                msg.reply(mails.key);
             }
-        }
-        msg.reply(
-            "Désolé, je ne connais pas le mail de cette personne. Si c'est un oubli, faites un PR pour l'ajouter au code !"
-        );
-    }
+        });
+    });
+    msg.reply("Prof not found. 404. Merde !");
 };
 
 function jeu_pfc(x) {
