@@ -1,5 +1,13 @@
 require("dotenv").config();
-const { feur, mechant, react, repete, pfc, profmail } = require("./functions");
+const {
+    feur,
+    mechant,
+    react,
+    repete,
+    pfc,
+    profmail,
+    getWhitelisted,
+} = require("./functions");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
@@ -30,6 +38,7 @@ client.on("messageCreate", (msg) => {
     repete(msg);
     pfc(msg);
     profmail(msg);
+    getWhitelisted(msg);
 });
 
 client.login(API_KEY);
