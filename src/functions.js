@@ -1,5 +1,7 @@
 const { links, mails, whitelist } = require("./consts");
 
+// TODO : SEPARATE EACH FUNCTION IN ITS OWN FILE
+
 const feur = (msg) => {
     let s = msg.content;
     let link = links[Math.floor(Math.random() * links.length)];
