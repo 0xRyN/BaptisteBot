@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { feur, mechant, react, repete, pfc } = require("./functions");
+const { feur, mechant, react, repete, pfc, profmail } = require("./functions");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
