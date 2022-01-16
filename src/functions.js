@@ -20,9 +20,7 @@ const getWhitelisted = (msg) => {
     if (s.toLowerCase().includes("whitelist")) {
         whitelist.push(msg.author.id);
         let reponse = "";
-        for (let i in whitelist) {
-            reponse += i + "\n";
-        }
+        whitelist.forEach((whitelisted) => (reponse += whitelisted + "\n"));
         msg.reply(
             "Vous etes a présent whitelist. \nUID des personnes ignorées par le feur : " +
                 reponse
