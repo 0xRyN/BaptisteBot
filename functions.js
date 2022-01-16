@@ -6,15 +6,31 @@ const feur = (msg) => {
         "https://cdn.discordapp.com/attachments/753279793461592174/919996299883970590/yt1s.com_-_FEUR_masterclass_ici_cest_Pessi_.mp4",
         "https://cdn.discordapp.com/attachments/730773665066516490/919997763524124742/VIDEO_FEUR.mp4",
     ];
+    const whitelist = [
+        "401703748109467648",
+        "363033061161435136",
+        "623246465287847956",
+        "122429924739907584",
+        "693079612627877939",
+    ];
+    // So far whitelisted members are (in order) :
+    /*
+        Uly#4465
+        Lyrelle#0512
+        Hipp0x#0668
+        PandorasRed#2564
+        Laure#0308
+    */
     let s = msg.content;
     let len = s.length;
     let link = links[Math.floor(Math.random() * links.length)];
+    let senderID = msg.member.user.id.toString(); // Note : conversion might truncate the ID. Test this.
     if (
-        s.substring(len - 4, len).toLowerCase() === "quoi" ||
-        s.substring(len - 6, len).toLowerCase() === "quoi ?" ||
-        s.substring(len - 5, len).toLowerCase() === "quoi?"
+        /\\w*[Qq][Uu][Oo][Ii][^A-Za-z0-9]*/.test(s) // replaced old tests by a regex
     ) {
-        msg.reply(link);
+        if (!whitelist.includes(senderID)) {
+            msg.reply(link);
+        }
     }
 };
 
