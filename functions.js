@@ -1,22 +1,69 @@
+const links = [
+    "https://cdn.discordapp.com/attachments/730773665066516490/919994972470652978/feur.mp4",
+    "https://cdn.discordapp.com/attachments/730773665066516490/919994147241353246/feur.mp4",
+    "https://cdn.discordapp.com/attachments/730773665066516490/919995774014722078/video0.mov",
+    "https://cdn.discordapp.com/attachments/753279793461592174/919996299883970590/yt1s.com_-_FEUR_masterclass_ici_cest_Pessi_.mp4",
+    "https://cdn.discordapp.com/attachments/730773665066516490/919997763524124742/VIDEO_FEUR.mp4",
+];
+const whitelist = [
+    "401703748109467648",
+    "363033061161435136",
+    "623246465287847956",
+    "122429924739907584",
+    "693079612627877939",
+];
+// So far whitelisted members are (in order) :
+/*
+    Uly#4465
+    Lyrelle#0512
+    Hipp0x#0668
+    PandorasRed#2564
+    Laure#0308
+*/
+
+const mailMap = new Map();
+
+mailMap.set("Abbes Samy:samy.abbes@univ-paris-diderot.fr");
+mailMap.set("Balthazar Bauer:Bauer.Balthazar@irif.fr");
+mailMap.set("Degorre Aldric:Aldric.Degorre@irif.fr");
+mailMap.set("Geoffroy Guillaume:Guillaume.Geoffroy@irif.fr");
+mailMap.set("Gonzalez Colin:Colin.Gonzalez@irif.fr");
+mailMap.set("Jurski Yan:jurski@irif.fr");
+mailMap.set("Laroussinie François:François.Laroussinie@irif.fr");
+mailMap.set("Letouzey Pierre:Pierre.Letouzey@irif.fr");
+mailMap.set("Mantaci Roberto:Roberto.Mantaci@irif.fr");
+mailMap.set("Micheli Anne:Anne.MICHELI@irif.fr");
+mailMap.set("Picantin Matthieu:picantin@irif.fr");
+mailMap.set("Poulalhon Dominique:Dominique.Poulalhon@irif.fr");
+mailMap.set("Rozière Paul:Paul.Roziere@irif.fr");
+mailMap.set("Sangnier Arnaud:Arnaud.Sangnier@irif.fr");
+mailMap.set("Sirangelo Cristina:Cristina.Sirangelo@irif.fr");
+mailMap.set("Zielonka Wieslaw:Wieslaw.Zielonka@irif.fr");
+
 const feur = (msg) => {
-    const links = [
-        "https://cdn.discordapp.com/attachments/730773665066516490/919994972470652978/feur.mp4",
-        "https://cdn.discordapp.com/attachments/730773665066516490/919994147241353246/feur.mp4",
-        "https://cdn.discordapp.com/attachments/730773665066516490/919995774014722078/video0.mov",
-        "https://cdn.discordapp.com/attachments/753279793461592174/919996299883970590/yt1s.com_-_FEUR_masterclass_ici_cest_Pessi_.mp4",
-        "https://cdn.discordapp.com/attachments/730773665066516490/919997763524124742/VIDEO_FEUR.mp4",
-    ];
     let s = msg.content;
     let len = s.length;
     let link = links[Math.floor(Math.random() * links.length)];
+    let senderID = msg.member.user.id.toString(); // Note : conversion might truncate the ID. Test this.
     if (
-        s.substring(len - 4, len).toLowerCase() === "quoi" ||
-        s.substring(len - 6, len).toLowerCase() === "quoi ?" ||
-        s.substring(len - 5, len).toLowerCase() === "quoi?"
+        /\\w*[Qq][Uu][Oo][Ii][^A-Za-z0-9]*/.test(s) // replaced old tests by a regex
     ) {
-        msg.reply(link);
+        if (!whitelist.includes(senderID)) {
+            msg.reply(link);
+        }
     }
 };
+
+const getWhitelisted = (msg) => {
+    let s = msg.content;
+    if (s.toLowerCase().includes("whitelist")) {
+        let reponse = "";
+        for (let i in whitelist) {
+            reponse += i+"\n";
+        }
+        msg.reply("UID des personnes ignorées par le feur : " + reponse);
+    }
+}
 
 const mechant = (msg) => {
     let rand = Math.random();
@@ -74,6 +121,22 @@ const pfc = (msg) => {
     }
 };
 
+const profmail = (msg) => {
+    let s = msg.content;
+    if (s.toLowerCase().includes("getmail")) {
+        const words = s.split(" ");
+        for (let word in words) {
+            for (let key in mailMap.keys) {
+                if (key.includes(word.toLowerCase())) {
+                    msg.reply(mailMap.get(key).split(":")[1]);
+                    return;
+                }
+            }
+        }
+        msg.reply("Désolé, je ne connais pas le mail de cette personne. Si c'est un oubli, faites un PR pour l'ajouter au code !");
+    }
+}
+
 function jeu_pfc(x) {
     var random = getRandomInt(3);
     var choix;
@@ -115,3 +178,5 @@ exports.react = react;
 exports.mechant = mechant;
 exports.feur = feur;
 exports.repete = repete;
+exports.profmail = profmail;
+exports.getWhitelisted = getWhitelisted;
