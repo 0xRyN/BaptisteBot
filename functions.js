@@ -21,30 +21,29 @@ const whitelist = [
     Laure#0308
 */
 
-const mailMap = new Map();
-
-mailMap.set("Abbes Samy:samy.abbes@univ-paris-diderot.fr");
-mailMap.set("Balthazar Bauer:Bauer.Balthazar@irif.fr");
-mailMap.set("Degorre Aldric:Aldric.Degorre@irif.fr");
-mailMap.set("Geoffroy Guillaume:Guillaume.Geoffroy@irif.fr");
-mailMap.set("Gonzalez Colin:Colin.Gonzalez@irif.fr");
-mailMap.set("Jurski Yan:jurski@irif.fr");
-mailMap.set("Laroussinie François:François.Laroussinie@irif.fr");
-mailMap.set("Letouzey Pierre:Pierre.Letouzey@irif.fr");
-mailMap.set("Mantaci Roberto:Roberto.Mantaci@irif.fr");
-mailMap.set("Micheli Anne:Anne.MICHELI@irif.fr");
-mailMap.set("Picantin Matthieu:picantin@irif.fr");
-mailMap.set("Poulalhon Dominique:Dominique.Poulalhon@irif.fr");
-mailMap.set("Rozière Paul:Paul.Roziere@irif.fr");
-mailMap.set("Sangnier Arnaud:Arnaud.Sangnier@irif.fr");
-mailMap.set("Sirangelo Cristina:Cristina.Sirangelo@irif.fr");
-mailMap.set("Zielonka Wieslaw:Wieslaw.Zielonka@irif.fr");
+const mails = {
+    "Abbes Samy": "samy.abbes@univ-paris-diderot.fr",
+    "Balthazar Bauer": "Bauer.Balthazar@irif.fr",
+    "Degorre Aldric": "Aldric.Degorre@irif.fr",
+    "Geoffroy Guillaume": "Guillaume.Geoffroy@irif.fr",
+    "Gonzalez Colin": "Colin.Gonzalez@irif.fr",
+    "Jurski Yan": "jurski@irif.fr",
+    "Laroussinie François": "François.Laroussinie@irif.fr",
+    "Letouzey Pierre": "Pierre.Letouzey@irif.fr",
+    "Mantaci Roberto": "Roberto.Mantaci@irif.fr",
+    "Micheli Anne": "Anne.MICHELI@irif.fr",
+    "Picantin Matthieu": "picantin@irif.fr",
+    "Poulalhon Dominique": "Dominique.Poulalhon@irif.fr",
+    "Rozière Paul": "Paul.Roziere@irif.fr",
+    "Sangnier Arnaud": "Arnaud.Sangnier@irif.fr",
+    "Sirangelo Cristina": "Cristina.Sirangelo@irif.fr",
+    "Zielonka Wieslaw": "Wieslaw.Zielonka@irif.fr",
+};
 
 const feur = (msg) => {
     let s = msg.content;
-    let len = s.length;
     let link = links[Math.floor(Math.random() * links.length)];
-    let senderID = msg.member.user.id.toString(); // Note : conversion might truncate the ID. Test this.
+    let senderID = msg.author.id; // Note : conversion might truncate the ID. Test this.
     if (
         /\\w*[Qq][Uu][Oo][Ii][^A-Za-z0-9]*/.test(s) // replaced old tests by a regex
     ) {
@@ -57,13 +56,17 @@ const feur = (msg) => {
 const getWhitelisted = (msg) => {
     let s = msg.content;
     if (s.toLowerCase().includes("whitelist")) {
+        whitelist.push(msg.author.id);
         let reponse = "";
         for (let i in whitelist) {
-            reponse += i+"\n";
+            reponse += i + "\n";
         }
-        msg.reply("UID des personnes ignorées par le feur : " + reponse);
+        msg.reply(
+            "Vous etes a présent whitelist. \nUID des personnes ignorées par le feur : " +
+                reponse
+        );
     }
-}
+};
 
 const mechant = (msg) => {
     let rand = Math.random();
@@ -94,19 +97,6 @@ const repete = (msg) => {
             }
         }
         msg.reply(repete_word);
-
-        /*TODO PLUS TARD faire en emoji;
-        for(let i = 0; i < repete_word.length; i++){
-            console.log("\:regional_indicator_"+ repete_word.charAt(i)+":");
-
-            if(repete_word.charAt(i) >= 97 ||  repete_word.charAt(i) <= 122){
-                msg.react("❔");
-            }else{
-        //        msg.guild.emojis.cache.find(emoji => emoji.name === ("regional_indicator_" + charAt(i))).then((reactionEmoji) => {msg.react(reactionEmoji)});
-            ///    console.log(reactionEmoji);
-               msg.react( msg.guild.emojis.cache.find(emoji => emoji.name === ("regional_indicator_" + charAt(i))).then((reactionEmoji) => {msg.react(reactionEmoji)}));
-            }
-    }*/
     }
 };
 
@@ -123,19 +113,22 @@ const pfc = (msg) => {
 
 const profmail = (msg) => {
     let s = msg.content;
-    if (s.toLowerCase().includes("getmail")) {
+    let keys = Object.keys(mails);
+    if (s.toLowerCase().includes("!mail")) {
         const words = s.split(" ");
         for (let word in words) {
-            for (let key in mailMap.keys) {
+            for (let key in keys) {
                 if (key.includes(word.toLowerCase())) {
-                    msg.reply(mailMap.get(key).split(":")[1]);
+                    msg.reply(mails.key);
                     return;
                 }
             }
         }
-        msg.reply("Désolé, je ne connais pas le mail de cette personne. Si c'est un oubli, faites un PR pour l'ajouter au code !");
+        msg.reply(
+            "Désolé, je ne connais pas le mail de cette personne. Si c'est un oubli, faites un PR pour l'ajouter au code !"
+        );
     }
-}
+};
 
 function jeu_pfc(x) {
     var random = getRandomInt(3);
