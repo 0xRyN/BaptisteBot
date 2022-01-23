@@ -22,9 +22,9 @@ const updateStats = async (userId, hasWon) => {
     });
 };
 
-const draw = () => {
+const isLost = () => {
     let r = Math.random();
-    return r > 0.95;
+    return r > 0.9;
 };
 
 function timeout(ms) {
@@ -33,7 +33,7 @@ function timeout(ms) {
 
 const kick = async (user) => {
     await timeout(3000);
-    user.kick("Tu as perdu la roulette... Triste");
+    await user.kick("Tu as perdu la roulette... Triste");
 };
 
 const leaderboard = async (msg, client) => {
@@ -87,14 +87,14 @@ const roulette = async (msg) => {
         return;
     }
     let userId = msg.author.id;
-    if (draw()) {
+    if (isLost()) {
         let userToKick = msg.member;
         msg.reply(
             "Tu as perdu la roulette, tu vas être kick dans 3 secondes..."
         );
         updateStats(userId, false);
         try {
-            kick(userToKick);
+            await kick(userToKick);
         } catch (e) {
             msg.reply("Impossible de le kick. Il serait donc un dieu ?");
         }
