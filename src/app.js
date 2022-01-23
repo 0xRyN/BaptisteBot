@@ -8,6 +8,9 @@ const {
     profmail,
     getWhitelisted,
 } = require("./functions");
+
+const { roulette, leaderboard } = require("./russian-roulette");
+
 const { Client, Intents } = require("discord.js");
 const client = new Client({
     intents: [
@@ -39,6 +42,8 @@ client.on("messageCreate", (msg) => {
     pfc(msg);
     profmail(msg);
     getWhitelisted(msg);
+    roulette(msg);
+    leaderboard(msg, client);
 });
 
 client.login(API_KEY);
