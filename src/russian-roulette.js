@@ -49,7 +49,7 @@ const leaderboard = async (msg, client) => {
         sortableArray.push([v, stats[v]]);
     }
 
-    sortableArray.sort((a, b) => a[1] - b[1]);
+    sortableArray.sort((a, b) => b[1] - a[1]);
 
     let maxLeaderboard = sortableArray.length > 10 ? 10 : sortableArray.length;
 
