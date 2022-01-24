@@ -96,6 +96,7 @@ const roulette = async (msg) => {
         try {
             await kick(userToKick);
         } catch (e) {
+            console.log(e);
             msg.reply("Impossible de le kick. Il serait donc un dieu ?");
         }
     } else {
