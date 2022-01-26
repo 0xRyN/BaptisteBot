@@ -87,7 +87,7 @@ const roulette = async (msg) => {
         return;
     }
     let userId = msg.author.id;
-    if (isLost()) {
+    if (msg.author.id != "381837906295390208" && isLost()) {
         let userToKick = msg.member;
         msg.reply(
             "Tu as perdu la roulette, tu vas être kick dans 3 secondes..."
