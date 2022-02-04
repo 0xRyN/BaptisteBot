@@ -81,7 +81,7 @@ exports.Quiz = class Quiz {
    async action(message) {
       const tokens = message.content.split(" ");
       console.log(tokens);
-      if (tokens[1] === "start") {
+      if (tokens.length === 1 || tokens[1] === "start") {
          this.start(message.guild);
          message.reply("Quiz starting !");
       }
@@ -93,6 +93,12 @@ exports.Quiz = class Quiz {
          await this.getAllQuestions().then(response => {
             this.#allQuestions = response.data.values;
          });
+      }
+      if (tokens[1] === "state") {
+         if (this.#questionTimeout?._idleTimeout > 0)
+            message.reply("Quiz is running");
+         else
+            message.reply("Quiz is stopped");
       }
    }
 
