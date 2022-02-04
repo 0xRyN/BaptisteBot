@@ -5,11 +5,13 @@
   "main": "./src/app.js",
   "dependencies": {
     "discord.js": "^13.3.1",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "googleapis": "^94.0.0",
+    "nodemon": "^2.0.15"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/app.js"
+    "start": "nodemon ./src/app.js"
   },
   "author": "0xRyN",
   "license": "ISC",
