@@ -62,7 +62,10 @@ exports.Quiz = class Quiz {
       if (this.#auth !== null && this.#googleSheetsInstance !== null)
          throw new Error("Quiz already registered");
       this.#auth = new google.auth.GoogleAuth({
-         keyFile: path.join(__dirname, "config/client-secret.json"), //the key file
+         credentials: {
+            client_email: process.env.GOOGLE_CLIENT_EMAIL,
+            private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+         }, 
          //url to spreadsheets API
          scopes: "https://www.googleapis.com/auth/spreadsheets", 
       });
