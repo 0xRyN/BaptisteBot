@@ -14,8 +14,10 @@ exports.Quiz = class Quiz {
    #channelBlacklist = [];
    #questionTimeout;
 
-   #headers
    #allQuestions;
+
+   #MINTIME_NEXT;
+   #MAXTIME_NEXT;
 
 
    static getInstance(guild) {
@@ -29,7 +31,7 @@ exports.Quiz = class Quiz {
       if (token !== instanceToken) {
         throw new Error('Constructor is private');
       }
-    }
+   }
 
    checkInstance() {
       if (this.#auth === null || this.#googleSheetsInstance === null)
@@ -43,6 +45,16 @@ exports.Quiz = class Quiz {
 
    channelBlacklist(list) {
       this.#channelBlacklist = list;
+      return this;
+   }
+
+   minTime(time) {
+      this.#MINTIME_NEXT = time * 1000;
+      return this;
+   }
+
+   maxTime(time) {
+      this.#MAXTIME_NEXT = time * 1000;
       return this;
    }
 
@@ -75,44 +87,64 @@ exports.Quiz = class Quiz {
    }
 
    getAllQuestions() {
-      return this.query("Questions", "A2", "G")
+      return this.query("Questions", "A2", "I")
    }
 
    async action(message) {
       const tokens = message.content.split(" ");
-      console.log(tokens);
       if (tokens.length === 1 || tokens[1] === "start") {
+         if (this.#questionTimeout?._idleTimeout > 0) {
+            message.reply("Quiz already started");
+            return;
+         }
          this.start(message.guild);
          message.reply("Quiz starting !");
+         return;
       }
       if (tokens[1] === "stop") {
          clearTimeout(this.#questionTimeout);
          message.reply("Quiz stopped");
+         return;
       }
       if (tokens[1] === "reload") {
          await this.getAllQuestions().then(response => {
-            this.#allQuestions = response.data.values;
+            this.#allQuestions = response.data.values.filter(e => e[7] === '1');
+         }).then(() => {
+            message.react("✅");
          });
+         return;
       }
       if (tokens[1] === "state") {
          if (this.#questionTimeout?._idleTimeout > 0)
             message.reply("Quiz is running");
          else
             message.reply("Quiz is stopped");
+         return;
+      }
+      if (tokens[1] === "leaderboard") {
+         let leaderboard;
+         await this.query("Leaderboard", "A2", "I").then(response => {
+            if (!response.data.values) {
+               message.reply("No player in the leaderboard");
+               return;
+            }
+
+            leaderboard = response.data.values
+               .map(e => {
+                  return [ e[0], parseInt(e[1]), e[2] ];
+               })
+               .sort((e1, e2) => {
+                  return e2[1] - e1[1];
+               });
+
+            message.reply(":trophy: Leaderboard : :trophy:\n" + leaderboard.map((e, i) => `${i + 1}. **${e[0]}** : ${e[1]} points`).join("\n"));
+         });
       }
    }
 
    async start(guild) {
-      await this.getHeaders().then(response => {
-         this.#headers = response.data.values[0].map((elt, i) => {
-            return {
-               propIndex: i,
-               prop: elt
-            }
-         });
-      });
       await this.getAllQuestions().then(response => {
-         this.#allQuestions = response.data.values;
+         this.#allQuestions = response.data.values.filter(e => e[7] === '1');
       });
       
       const supportedChannels = Array.from(
@@ -130,14 +162,113 @@ exports.Quiz = class Quiz {
    }
 
    #askQuestion(supportedChannels) {
-      const rand = Math.floor(Math.random() * (10_000 - 1_000 + 1) + 1_000)
+      const rand = Math.floor(Math.random() * (this.#MAXTIME_NEXT - this.#MINTIME_NEXT + 1) + this.#MINTIME_NEXT);
       this.#questionTimeout = setTimeout(() => {
          // TODO : send question
-         const randomIndex = Math.floor(Math.random() * (this.#allQuestions.length));
+         let randomIndex = Math.floor(Math.random() * (this.#allQuestions.length));
          const question = this.#allQuestions[randomIndex];
-         
+      
+         randomIndex = Math.floor(Math.random() * (supportedChannels.length));
+         const channel = supportedChannels[randomIndex];
 
+         channel
+            .send(`:rotating_light: **NOUVELLE QUESTION :** :rotating_light:\n
+            **Question :** ${question[1]} :
+               1) - ${question[2]}
+               2) - ${question[3]}
+               3) - ${question[4]}
+               4) - ${question[5]}`)
+            .then(msg => {
+               msg.react("1️⃣");
+               msg.react("2️⃣");
+               msg.react("3️⃣");
+               msg.react("4️⃣");
+
+               setTimeout(() => {
+                  msg.edit(`
+                  **Réponse :** ${question[1]} :
+                  ✅ ${question[parseInt(question[6]) + 1]}`)
+                  msg.reactions.removeAll()
+	                  .catch(error => console.error('Failed to remove reactions:', error));
+               }, question[8] * 1000);   
+               
+               
+               const filter = (reaction, user) => {
+                  return user.id !== msg.author.id;
+               };
+
+               const emojiToIndex = {
+                  "1️⃣": "1",
+                  "2️⃣": "2",
+                  "3️⃣": "3",
+                  "4️⃣": "4"
+               }
+               
+               const collector = msg.createReactionCollector({ filter, time: question[8] * 1_000 });
+               
+               const alreadyResponded = [];
+               let order = 1;
+               collector.on('collect', async (reaction, user) => {
+                  // Vérifier si user a déjà réagi
+                  // TODO : enlever les réactions déjà mises du user
+                  if (alreadyResponded.includes(user.id))
+                     return;
+                  alreadyResponded.push(user.id);
+
+                  // Vérifier la réponse
+                  
+                  if (emojiToIndex[reaction.emoji.name] === question[6]) {
+                     const score = Math.floor(100 / order);
+
+                     // Get user row in sheet
+                     const allUsers = this.query("Leaderboard", "A2", "C");
+                     let tempUser;
+                     let create = false;
+
+                     await allUsers.then(response => {
+                        if (!response.data.values) 
+                           response.data.values = [];
+
+                        tempUser = response.data.values.find(e => e[0] === user.tag);
+                        // If user row doesn't exist, create it
+                        if (!tempUser) {
+                           tempUser = [ user.tag, score.toString(), (response.data.values.length+2).toString() ];
+                           create = true;
+                        } else {
+                           tempUser[1] = (parseInt(tempUser[1]) + score).toString();
+                        }
+                     });
+                     
+                     // Update user row
+                     if (create) {
+                        await this.#googleSheetsInstance.spreadsheets.values.append({
+                           auth: this.#auth,
+                           spreadsheetId: this.#spreadsheetId,
+                           range: `Leaderboard!A${tempUser[2]}:C${tempUser[2]}`,
+                           valueInputOption: "USER_ENTERED",
+                           resource: {
+                              values: [ tempUser ]
+                           }
+                        });
+                     } else {
+                        await this.#googleSheetsInstance.spreadsheets.values.update({
+                           auth: this.#auth,
+                           spreadsheetId: this.#spreadsheetId,
+                           range: `Leaderboard!A${tempUser[2]}:C${tempUser[2]}`,
+                           valueInputOption: "USER_ENTERED",
+                           resource: {
+                              values: [ tempUser ]
+                           }
+                        });
+                     }
+                     order++;
+                  }
+               });
+         });
+
+
+         // Recursive call
          this.#askQuestion(supportedChannels);
-      }, rand)
+      }, rand);
    }
 };

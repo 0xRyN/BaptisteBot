@@ -30,7 +30,9 @@ client.on("ready", () => {
         .register()
         .channelBlacklist([
             "939160809139998771"
-        ]);
+        ])
+        .minTime(10 * 60) // 10 minutes
+        .maxTime(24 * 60 * 60) // 24 hours;
 });
 
 client.on("messageCreate", (msg) => {
