@@ -28,8 +28,8 @@ client.on("ready", () => {
     console.log("C'est prêt !");
     quiz = Quiz.getInstance()
         .register()
-        .channelBlacklist([
-            "939160809139998771"
+        .channelWhitelist([
+            "753251804568879205"
         ])
         .minTime(10 * 60) // 10 minutes
         .maxTime(24 * 60 * 60) // 24 hours;
