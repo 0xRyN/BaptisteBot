@@ -142,6 +142,64 @@ exports.Quiz = class Quiz {
 
             message.reply(":trophy: Leaderboard : :trophy:\n" + leaderboard.map((e, i) => `${i + 1}. **${e[0]}** : ${e[1]} points`).join("\n"));
          });
+         return;
+      }
+      if (tokens[1] === "wlist") {
+         if (!tokens[2]) {
+            const channels = this.#channelWhitelist
+               .map((e) => `- ${message.guild.channels.cache.get(e)}`)
+               .filter(e => e && e !== "undefined");
+            message.reply("Whitelist :\n" + channels.join("\n"));
+            return;
+         }
+         if (tokens[2] === "add") {
+            if (!tokens[3])
+               return;
+
+            if (message.guild.channels.cache.get(tokens[3])) {
+               this.#channelWhitelist.push(tokens[3]);
+               message.reply(`${message.guild.channels.cache.get(tokens[3])} added to whitelist`);
+            } else {
+               message.reply(`${tokens[3]} is not a valid channel`);
+            }
+            return;
+         } 
+         if (tokens[2] === "remove") {
+            if (!tokens[3])
+               return;
+            this.#channelWhitelist = this.#channelWhitelist.filter(e => e !== tokens[3]);
+            
+            return;
+         }
+      }
+      if (tokens[1] === "blist") {
+         if (!tokens[2]) {
+            const channels = this.#channelBlacklist
+               .map((e) => `- ${message.guild.channels.cache.get(e)}`)
+               .filter(e => e !== "undefined");
+            message.reply("Blacklist :\n" + channels.join("\n"));
+            return;
+         }
+         if (tokens[2] === "add") {
+            if (!tokens[3])
+               return;
+         
+            if (message.guild.channels.cache.get(tokens[3])) {
+               this.#channelBlacklist.push(tokens[3]);
+               message.reply(`${message.guild.channels.cache.get(tokens[3])} added to blacklist`);
+            } else {
+               message.reply(`${tokens[3]} is not a valid channel`);
+            }
+            return;
+         } 
+         if (tokens[2] === "remove") {
+            if (!tokens[3])
+               return;
+            this.#channelBlacklist = this.#channelBlacklist.filter(e => e !== tokens[3]);
+            message.reply(`${message.guild.channels.cache.get(tokens[3])} removed from blacklist`);
+            return;
+         }
+         
       }
    }
 
@@ -150,15 +208,16 @@ exports.Quiz = class Quiz {
          this.#allQuestions = response.data.values.filter(e => e[7] === '1');
       });
       
-      const supportedChannels = Array.from(
-         guild.channels.cache.filter(e => {
-            if (e.type !== "GUILD_TEXT")
-               return false;
-            if (this.#channelWhitelist.length === 0)
-               return !this.#channelBlacklist.includes(e.id);
-            return !this.#channelBlacklist.includes(e.id) && this.#channelWhitelist.includes(e.id);
-         }), ([_, value]) => value
-      );
+      const supportedChannels = Array.from(guild.channels.cache.filter(e => {
+         if (e.type !== "GUILD_TEXT")
+            return false;
+         if (this.#channelWhitelist.length === 0)
+            return !this.#channelBlacklist.includes(e.id);
+         return !this.#channelBlacklist.includes(e.id) && this.#channelWhitelist.includes(e.id);
+      }), ([_, values]) => values);
+
+      if (supportedChannels.length === 0) 
+         return;
 
       this.#askQuestion(supportedChannels);
       
@@ -166,6 +225,16 @@ exports.Quiz = class Quiz {
 
    #askQuestion(supportedChannels) {
       const rand = Math.floor(Math.random() * (this.#MAXTIME_NEXT - this.#MINTIME_NEXT + 1) + this.#MINTIME_NEXT);
+
+      supportedChannels = supportedChannels.filter(e => {
+         if (this.#channelWhitelist.length === 0)
+            return !this.#channelBlacklist.includes(e.id);
+         return !this.#channelBlacklist.includes(e.id) && this.#channelWhitelist.includes(e.id);
+      });
+
+      if (supportedChannels.length === 0)
+         return;
+
       this.#questionTimeout = setTimeout(() => {
          // TODO : send question
          let randomIndex = Math.floor(Math.random() * (this.#allQuestions.length));
