@@ -29,7 +29,7 @@ client.on("ready", () => {
     quiz = Quiz.getInstance()
         .register()
         .channelWhitelist([
-            "753251804568879205"
+            "753279793461592174"
         ])
         .minTime(10 * 60) // 10 minutes
         .maxTime(24 * 60 * 60) // 24 hours;
