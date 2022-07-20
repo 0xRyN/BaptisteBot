@@ -1,19 +1,25 @@
 {
-  "name": "baptistebot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./src/app.js",
-  "dependencies": {
-    "discord.js": "^13.3.1",
-    "dotenv": "^10.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/app.js"
-  },
-  "author": "0xRyN",
-  "license": "ISC",
-  "engines": {
-    "node": "^16.8.0"
-  }
+    "name": "baptistebot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./dist/app.js",
+    "type": "commonjs",
+    "dependencies": {
+        "discord.js": "^14.0.3",
+        "dotenv": "^16.0.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc",
+        "start": "node ./dist/app.js"
+    },
+    "author": "0xRyN",
+    "license": "ISC",
+    "engines": {
+        "node": "^16.8.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.6",
+        "typescript": "^4.7.4"
+    }
 }
