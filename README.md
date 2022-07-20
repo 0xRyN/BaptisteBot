@@ -1,5 +1,21 @@
 FULL DISCORD.JS GUIDE : https://discordjs.guide/
 
+# [UPDATE] TypeScript Rewrite
+
+To run for your own server, you need to build first.
+
+First, install dependencies :
+
+`npm install`
+
+Then build the bot :
+
+`npm run build`
+
+Then, you can start the bot :
+
+`npm start`
+
 # English
 
 ## Dependencies
