@@ -23,7 +23,7 @@ async function handshake(client: Client) {
 
 client.on("ready", () => {
     console.log("C'est prêt !");
-    handshake(client);
+    // handshake(client); If want to send a message on "up" state
 });
 
 client.on("messageCreate", (message) => {
